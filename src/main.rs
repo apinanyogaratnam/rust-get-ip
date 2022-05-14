@@ -42,6 +42,22 @@ impl Component for Model {
     }
 }
 
+fn get_ip() {
+    match reqwest::get("https://httpbin.org/ip") {
+        Ok(mut response) => {
+            if response.status() == reqwest::status::Ok {
+                match response.text() {
+                    Ok(text) => println!("Response: {}", text),
+                    Err(_) => println!("Error getting text from response")
+                }
+            } else {
+                println!("Error getting response: {}", response.status());
+            }
+        }
+        Err(_) => println!("Error getting response")
+    }
+}
+
 #[tokio::main]
 async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
     let resp = reqwest::get("https://httpbin.org/ip")
@@ -53,5 +69,6 @@ async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn main() {
-    yew::start_app::<Model>();
+    // yew::start_app::<Model>();
+    get_ip();
 }
