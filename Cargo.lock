@@ -1156,5 +1156,6 @@ name = "yew-weather-client"
 version = "0.1.0"
 dependencies = [
  "reqwest",
+ "tokio",
  "yew",
 ]
