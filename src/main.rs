@@ -1,4 +1,5 @@
 use yew::prelude::*;
+use std::collections::HashMap;
 
 enum Msg {
     AddOne,
@@ -39,6 +40,16 @@ impl Component for Model {
             </div>
         }
     }
+}
+
+#[tokio::main]
+async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
+    let resp = reqwest::get("https://httpbin.org/ip")
+        .await?
+        .json::<HashMap<String, String>>()
+        .await?;
+    println!("{:#?}", resp);
+    Ok(())
 }
 
 fn main() {
