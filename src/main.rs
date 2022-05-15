@@ -1,4 +1,5 @@
 use yew::prelude::*;
+use serde::{Serialize, Deserialize};
 
 enum Msg {
     AddOne,
@@ -41,7 +42,23 @@ impl Component for Model {
     }
 }
 
-
-fn main() {
-    yew::start_app::<Model>();
+#[derive(Debug, Serialize, Deserialize)]
+struct IP {
+    #[serde(rename = "origin")]
+    ip: String,
 }
+
+#[tokio::main]
+async fn main() -> Result<(), reqwest::Error> {
+    let client = reqwest::Client::new();
+    let res: IP = client.get("https://httpbin.org/ip").send().await?.json().await?;
+
+    let ip: String = res.ip;
+    println!("{}", ip);
+
+    Ok(())
+}
+
+// fn main() {
+//     yew::start_app::<Model>();
+// }
