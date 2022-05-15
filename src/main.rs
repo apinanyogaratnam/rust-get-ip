@@ -48,7 +48,7 @@ impl Component for Model {
     }
 }
 
-async fn get_ip() -> String {
+async fn async_get_ip() -> String {
     let response: Result<IP, reqwest::Error> = reqwest::get("http://ip.jsontest.com/")
         .await
         .unwrap()
