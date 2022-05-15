@@ -10,11 +10,6 @@ struct Model {
     value: i64,
 }
 
-#[derive(Deserialize)]
-struct IP {
-    origin: String,
-}
-
 impl Component for Model {
     type Message = Msg;
     type Properties = ();
@@ -48,38 +43,7 @@ impl Component for Model {
     }
 }
 
-async fn async_get_ip() -> String {
-    let response: Result<IP, reqwest::Error> = reqwest::get("http://ip.jsontest.com/")
-        .await
-        .unwrap()
-        .json::<IP>()
-        .await;
-
-    return match response {
-        Ok(ip) => ip.origin.clone(),
-        Err(e) => format!("Error: {}", e),
-    };
-}
-
-fn get_ip() -> Result<String, Box<dyn std::error::Error>> {
-    let response = reqwest::blocking::get("http://httpbin.org/ip")?
-        .json::<HashMap<String, String>>()?;
-
-    Ok(response["origin"].clone())
-}
-
-#[tokio::main]
-async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
-    let resp = reqwest::get("https://httpbin.org/ip")
-        .await?
-        .json::<HashMap<String, String>>()
-        .await?;
-    println!("{:#?}", resp);
-    Ok(())
-}
 
 fn main() {
     // yew::start_app::<Model>();
-    let ip = get_ip();
-    println!("{:?}", ip);
 }
