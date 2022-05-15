@@ -1,5 +1,6 @@
 use yew::prelude::*;
 use std::collections::HashMap;
+use serde::Deserialize;
 
 enum Msg {
     AddOne,
@@ -7,6 +8,11 @@ enum Msg {
 
 struct Model {
     value: i64,
+}
+
+#[derive(Deserialize)]
+struct IP {
+    origin: String,
 }
 
 impl Component for Model {
@@ -43,13 +49,16 @@ impl Component for Model {
 }
 
 async fn get_ip() -> String {
-    let response = reqwest::get("http://ip.jsontest.com/")
+    let response: Result<IP, reqwest::Error> = reqwest::get("http://ip.jsontest.com/")
         .await
         .unwrap()
-        .json::<HashMap<String, String>>()
+        .json::<IP>()
         .await;
-    let ip = response.get("origin").unwrap();
-    return ip.to_string();
+
+    return match response {
+        Ok(ip) => ip.origin.clone(),
+        Err(e) => format!("Error: {}", e),
+    };
 }
 
 #[tokio::main]
@@ -64,5 +73,5 @@ async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
 
 fn main() {
     // yew::start_app::<Model>();
-    get_ip();
+    let ip = get_ip();
 }
