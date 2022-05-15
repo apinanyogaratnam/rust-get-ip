@@ -57,10 +57,7 @@ async fn get_ip() -> Result<String, reqwest::Error> {
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
-    let client = reqwest::Client::new();
-    let res: IP = client.get("https://httpbin.org/ip").send().await?.json().await?;
-
-    let ip: String = res.ip;
+    let ip = get_ip().await?;
     println!("{}", ip);
 
     Ok(())
