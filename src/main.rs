@@ -48,6 +48,13 @@ struct IP {
     ip: String,
 }
 
+async fn get_ip() -> Result<String, reqwest::Error> {
+    let client = reqwest::Client::new();
+    let res: IP = client.get("https://httpbin.org/ip").send().await?.json().await?;
+
+    return Ok(res.ip);
+}
+
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
     let client = reqwest::Client::new();
