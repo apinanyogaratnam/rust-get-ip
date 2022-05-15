@@ -1,6 +1,4 @@
 use yew::prelude::*;
-use std::collections::HashMap;
-use serde::Deserialize;
 
 enum Msg {
     AddOne,
@@ -45,5 +43,5 @@ impl Component for Model {
 
 
 fn main() {
-    // yew::start_app::<Model>();
+    yew::start_app::<Model>();
 }
