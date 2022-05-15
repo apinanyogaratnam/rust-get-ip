@@ -61,6 +61,13 @@ async fn async_get_ip() -> String {
     };
 }
 
+fn get_ip() -> Result<String, Box<dyn std::error::Error>> {
+    let response = reqwest::blocking::get("http://httpbin.org/ip")?
+        .json::<HashMap<String, String>>()?;
+
+    Ok(response["origin"].clone())
+}
+
 #[tokio::main]
 async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
     let resp = reqwest::get("https://httpbin.org/ip")
@@ -74,4 +81,5 @@ async fn make_request() -> Result<(), Box<dyn std::error::Error>> {
 fn main() {
     // yew::start_app::<Model>();
     let ip = get_ip();
+    println!("{:?}", ip);
 }
