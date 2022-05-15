@@ -62,9 +62,6 @@ async fn get_ip_address() -> String {
 
 #[tokio::main]
 async fn main() -> Result<(), reqwest::Error> {
-    let ip = get_ip().await?;
-    println!("{}", ip);
-
     let ip = get_ip_address().await;
     println!("{}", ip);
 
